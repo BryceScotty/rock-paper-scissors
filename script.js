@@ -1,6 +1,28 @@
 let compChoice;
+let playerInput;
+let outcomeText="";
+let secondaryOutcome="";
 let compScore=0;
 let playerScore=0;
+
+const score=document.querySelector('.score')
+const decisionOutcome=document.querySelector('.decisionOutcome')
+
+
+function createRestart(){
+    const restartButtonCreation=document.querySelector('.results')
+    const restartButton=document.createElement('button')
+    restartButton.textContent="Go Again?"
+    restartButton.classList.add('.restartButton')
+    restartButtonCreation.appendChild(restartButton)
+    restartButton.addEventListener('click', function restart(){
+        decisionOutcome.textContent="Let's Begin";
+        score.textContent=''
+        compScore=0;
+        playerScore=0;
+        restartButtonCreation.removeChild(restartButton)
+
+})}
 
 function getComputerChoice(){
     let compNum=Math.floor(Math.random()*3)
@@ -15,57 +37,66 @@ function getComputerChoice(){
     }
     return compChoice;
 }
-function getPlayerInput(){
-    let playerInput=prompt("Rock? Paper? Maybe Scissors?\n\nClick 'cancel' or 'esc' on your keyboard to quit\n")
-    playerInput=playerInput.toLowerCase()
+
+function decideWinner(){
     getComputerChoice()
     console.log("Computer: "+compChoice)
     console.log("You: "+playerInput)
     if (playerInput==compChoice){
-        alert("It's a tie!")
-        console.log("It's a tie, try again")
-    }
-    else if (!(playerInput=='rock' || playerInput=='paper' || playerInput=='scissors')){
-        alert("Invalid response")
-        console.log('Nothing')
+        outcomeText="It's a tie, try again"
     }
     else if (playerInput=='scissors' && compChoice=='paper'||
             playerInput=='rock' && compChoice=='scissors'||
             playerInput=='paper' && compChoice=='rock'){
-        alert('You got the dub')
+        if (playerScore==4){
+            playerScore+=1
+            outcomeText='WINNNNNNNNNN'
+            createRestart()
+        }
+        else{
         playerScore+=1
-        console.log('You won!')
-        return playerScore;
-    }
+        outcomeText='You won!'
+    }}
     else {
-        alert('Loser')
+        if(compScore==4){
+            compScore+=1
+            createRestart()
+            outcomeText='Heartbreaking Defeat...\nThe Choke Of A Century'
+            // if(playerScore==0){
+            //     outcomeText=`Horrifying Defeat\nDid You Even Try?`
+
+            // }
+            // else if(playerScore<=2){
+            //     outcomeText=`Significant Margin Loss\nGet Good Mate`
+
+            // }
+            // else if (playerScore<4){
+            //     outcomeText='Tough Loss. Maybe Next Time Champ'
+
+            // }
+            // else{
+            //     outcomeText1='Heartbreaking Defeat...'
+            //     outcomeText2='The Choke Of A Century'
+            // }
+        }
+        else{
         compScore+=1
-        console.log('You lost...')
-        return compScore;
+        outcomeText='You lost...'
     }}
-    
-
-function game(){
-    while (playerScore< 5 && compScore<5){
-    console.log('            ----               ')
-    console.log('Your Score: '+playerScore)
-    console.log('Computer Score: '+compScore)
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    getPlayerInput()
-
-    if (playerScore==5){
-        alert("You won the whole thing")
-        console.log('Total victory')
-    }
-    else if (compScore==5){
-        alert("Game Over...")
-        console.log('Everything is lost')
-    }}
-    console.log('Your Score: '+playerScore)
-    console.log('Computer Score: '+compScore)
 }
 
-let begin=prompt("Click \'ok\' to play the game\nClick 'cancel' or 'esc' on your keyboard to exit")
-if(begin!=null){
-game()
-}
+
+
+    const playerButtons=document.querySelectorAll('.button');
+    playerButtons.forEach((button) => {
+        button.addEventListener('click', function getPlayerInput(){
+            if(playerScore==5 || compScore==5){
+                return
+            }
+            else{
+            playerInput=button.id
+            decideWinner()
+            decisionOutcome.textContent=outcomeText+secondaryOutcome
+            score.textContent=`Your Score: ${playerScore} | Computer Score: ${compScore}`
+    }})});
+

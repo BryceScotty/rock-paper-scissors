@@ -37,16 +37,8 @@ function createRestart(){
 
 function getComputerChoice(){
     let compNum=Math.floor(Math.random()*3)
-    if (compNum===2){
-        compChoice='scissors'
-    }
-    else if(compNum===1){
-        compChoice='paper'
-    }
-    else {
-        compChoice='rock'
-    }
-    return compChoice;
+    let compChoiceArray=['rock','paper','scissors']
+    compChoice=compChoiceArray[compNum]
 }
 
 function displayChoices(playerInput,compChoice){
